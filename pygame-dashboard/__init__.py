@@ -3,7 +3,7 @@ pygame-dashboard - A simple UI library for pygame projects
 """
 
 __version__ = "0.1.0"
-__author__ = "Your Name"
+__author__ = "Robinson Petit"
 
 from .panel import Panel
 from .widgets import Slider, Toggle, Button
