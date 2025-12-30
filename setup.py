@@ -11,7 +11,7 @@ setup(
     description="A simple UI library for pygame projects",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/pygame-dashboard",
+    url="https://github.com/DARKOR-py/pygame-dashboard",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
