@@ -1,21 +1,24 @@
 """UI widget components"""
 
 import pygame
+from typing import Optional, Callable
 from .colors import Colors
 
 
 class Slider:
     """A draggable slider widget for numeric values"""
     
-    def __init__(self, x, y, width, min_val, max_val, initial_val, label):
-        self.rect = pygame.Rect(x, y, width, 20)
-        self.min_val = min_val
-        self.max_val = max_val
-        self.value = initial_val
-        self.label = label
-        self.dragging = False
+    def __init__(self, x: int, y: int, width: int, min_val: float, max_val: float, 
+                 initial_val: float, label: str) -> None:
+        self.rect: pygame.Rect = pygame.Rect(x, y, width, 20)
+        self.min_val: float = min_val
+        self.max_val: float = max_val
+        self.value: float = initial_val
+        self.label: str = label
+        self.dragging: bool = False
         
-    def draw(self, surface, font):
+    def draw(self, surface: pygame.Surface, font: pygame.font.Font) -> None:
+        """Draw the slider on the surface"""
         label_surf = font.render(f"{self.label}: {self.value:.2f}", True, Colors.TEXT)
         surface.blit(label_surf, (self.rect.x, self.rect.y - 20))
         
@@ -26,7 +29,8 @@ class Slider:
         handle_rect = pygame.Rect(handle_x - 5, self.rect.y - 3, 10, 26)
         pygame.draw.rect(surface, Colors.ACCENT, handle_rect, border_radius=3)
         
-    def handle_event(self, event):
+    def handle_event(self, event: pygame.event.Event) -> None:
+        """Handle pygame events"""
         if event.type == pygame.MOUSEBUTTONDOWN:
             handle_x = self.rect.x + int((self.value - self.min_val) / (self.max_val - self.min_val) * self.rect.width)
             handle_rect = pygame.Rect(handle_x - 5, self.rect.y - 3, 10, 26)
@@ -45,12 +49,13 @@ class Slider:
 class Toggle:
     """A toggle switch widget for boolean values"""
     
-    def __init__(self, x, y, label, initial_state=False):
-        self.rect = pygame.Rect(x, y, 40, 20)
-        self.label = label
-        self.state = initial_state
+    def __init__(self, x: int, y: int, label: str, initial_state: bool = False) -> None:
+        self.rect: pygame.Rect = pygame.Rect(x, y, 40, 20)
+        self.label: str = label
+        self.state: bool = initial_state
         
-    def draw(self, surface, font):
+    def draw(self, surface: pygame.Surface, font: pygame.font.Font) -> None:
+        """Draw the toggle on the surface"""
         label_surf = font.render(self.label, True, Colors.TEXT)
         surface.blit(label_surf, (self.rect.x + 50, self.rect.y))
         
@@ -60,7 +65,8 @@ class Toggle:
         circle_x = self.rect.x + 28 if self.state else self.rect.x + 12
         pygame.draw.circle(surface, (240, 240, 240), (circle_x, self.rect.centery), 8)
         
-    def handle_event(self, event):
+    def handle_event(self, event: pygame.event.Event) -> bool:
+        """Handle pygame events. Returns True if state changed."""
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.state = not self.state
@@ -71,13 +77,15 @@ class Toggle:
 class Button:
     """A clickable button widget"""
     
-    def __init__(self, x, y, width, height, label, callback=None):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.label = label
-        self.callback = callback
-        self.hovered = False
+    def __init__(self, x: int, y: int, width: int, height: int, label: str, 
+                 callback: Optional[Callable[[], None]] = None) -> None:
+        self.rect: pygame.Rect = pygame.Rect(x, y, width, height)
+        self.label: str = label
+        self.callback: Optional[Callable[[], None]] = callback
+        self.hovered: bool = False
         
-    def draw(self, surface, font):
+    def draw(self, surface: pygame.Surface, font: pygame.font.Font) -> None:
+        """Draw the button on the surface"""
         color = Colors.ACCENT if self.hovered else Colors.SLIDER_TRACK
         pygame.draw.rect(surface, color, self.rect, border_radius=5)
         
@@ -85,7 +93,8 @@ class Button:
         text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
         
-    def handle_event(self, event):
+    def handle_event(self, event: pygame.event.Event) -> bool:
+        """Handle pygame events. Returns True if button was clicked."""
         if event.type == pygame.MOUSEMOTION:
             self.hovered = self.rect.collidepoint(event.pos)
             
